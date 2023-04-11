@@ -1,25 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
+import BackendApiUrl from "../../api/BackendApiUrl";
 import Input from "../../component/Input";
 import SectionTitle from "../../component/SectionTitle";
-import BackendApiUrl from "../../api/BackendApiUrl";
-import { toast } from "react-hot-toast";
-import { useForm } from "react-hook-form";
 import auth from "../../firebase.init";
-import { useAuthState } from "react-firebase-hooks/auth";
-
 const ApplicationFrom = () => {
   const [user] = useAuthState(auth);
-  const { register, handleSubmit } = useForm();
+  const [editorState, setEditorState] = useState("");
+  const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
     //  =========== backend api===========================
     const applicationFrom = {
       email: user.email,
       subject: data.subject,
-      desciption: data.desciption,
+      desciption: editorState,
     };
+    console.log(applicationFrom);
     BackendApiUrl.post("/application", applicationFrom).then((data) => {
       if (data) {
         toast.success("Add Your application");
+        reset();
       } else {
         toast.error("Faild to add Your application");
       }
@@ -37,12 +41,19 @@ const ApplicationFrom = () => {
             className="input input-bordered w-full bg-transparent my-2"
             {...register("subject")}
           />
-          <textarea
-            className="textarea textarea-bordered h-52 w-full bg-transparent my-2"
-            placeholder="Desciption"
-            required
-            {...register("desciption")}
-          ></textarea>
+          <Editor
+            toolbarClassName="toolbarClassName"
+            wrapperClassName="wrapperClassName"
+            editorClassName="editorClassName"
+            toolbar={{
+              inline: { inDropdown: true },
+              list: { inDropdown: true },
+              textAlign: { inDropdown: true },
+              link: { inDropdown: true },
+              history: { inDropdown: true },
+            }}
+            onChange={(e) => setEditorState(e.blocks[0].text)}
+          />
 
           <Input
             type="submit"
