@@ -32,24 +32,21 @@ const Requisition = () => {
             <tr>
               <th>No</th>
               <th>Prjoject Name</th>
-              <th>Title</th>
-              <th>Details</th>
+              <th>Name</th>
+              <th>status</th>
             </tr>
           </thead>
           <tbody>
-            {requisitons.data.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.phone}</td>
+            {requisitons.data.map((requisiton) => (
+              <tr key={requisiton.id}>
+                <td>{requisiton.id}</td>
                 <td>
-                  <Link
-                    to={`/requisitonDetails/${user.id}`}
-                    className="btn btn-xs btn-info"
-                  >
-                    Details
+                  <Link className="hover:text-primary" to={`/requisitonDetails/${requisiton.id}`}>
+                    {requisiton.name}
                   </Link>
                 </td>
+                <td>{requisiton.username}</td>
+                <td>Success</td>
               </tr>
             ))}
           </tbody>

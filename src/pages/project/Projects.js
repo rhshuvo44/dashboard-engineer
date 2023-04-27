@@ -30,24 +30,22 @@ const Projects = () => {
               <th>Name</th>
               <th>Location</th>
               <th>Status</th>
-              <th>Details</th>
             </tr>
           </thead>
           <tbody>
             {projects.data.map((user) => (
               <tr key={user.id}>
                 <td>{user.id}</td>
-                <td>{user.name}</td>
-                <td>{user.phone}</td>
-                <td>Padding</td>
                 <td>
                   <Link
                     to={`/projectDetails/${user.id}`}
-                    className="btn btn-xs btn-info"
+                    className="hover:text-primary"
                   >
-                    Details
+                    {user.name}
                   </Link>
                 </td>
+                <td>{user.phone}</td>
+                <td>Pending</td>
               </tr>
             ))}
           </tbody>
