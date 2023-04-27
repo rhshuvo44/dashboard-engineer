@@ -9,16 +9,17 @@ const RequisitionFrom = () => {
   const [user] = useAuthState(auth);
   const [inputarr, setInputarr] = useState([]);
   const { register, handleSubmit, reset } = useForm();
-const date =  new Date()
+  const project = "Abc Project";
+  const date = new Date();
   const onSubmit = (data) => {
     setInputarr([...inputarr, data]);
     reset();
   };
   const requisitionFrom = {
     date,
-    project:"ABC",
+    project,
     email: user.email,
-    desciption: [...inputarr],
+    desciption: inputarr,
   };
   const requisitionSubmit = () => {
     //  =========== backend api===========================
@@ -27,6 +28,7 @@ const date =  new Date()
     // BackendApiUrl.post("/requisition", requisitionFrom).then((data) => {
     //   if (data) {
     //     toast.success("Add Your requisition");
+    //     setInputarr("");
     //   } else {
     //     toast.error("Faild to add Your requisition");
     //   }
@@ -39,10 +41,10 @@ const date =  new Date()
         <form onSubmit={handleSubmit(onSubmit)}>
           <input
             type="text"
-            placeholder="Project "
+            value={project}
+            disabled
             required
             className="input input-bordered w-full bg-transparent my-2"
-            {...register("products")}
           />
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
             <input
@@ -53,7 +55,7 @@ const date =  new Date()
               {...register("products")}
             />
             <input
-              type="text"
+              type="number"
               placeholder="Quentity"
               required
               className="input input-bordered w-full bg-transparent my-2"
@@ -74,7 +76,6 @@ const date =  new Date()
               {...register("remarks")}
             />
           </div>
-
           <Input
             type="submit"
             className="btn btn-primary capitalize"

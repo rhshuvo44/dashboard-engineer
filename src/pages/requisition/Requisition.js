@@ -17,7 +17,6 @@ const Requisition = () => {
   if (isLoading) {
     return <Loading />;
   }
-
   const pages = Math.ceil(count / size);
   return (
     <div className="pt-5">
