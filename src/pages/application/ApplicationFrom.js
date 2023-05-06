@@ -1,6 +1,4 @@
-import React, { useState } from "react";
-import { Editor } from "react-draft-wysiwyg";
-import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+import React from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
 import { toast } from "react-hot-toast";
@@ -10,16 +8,15 @@ import SectionTitle from "../../component/SectionTitle";
 import auth from "../../firebase.init";
 const ApplicationFrom = () => {
   const [user] = useAuthState(auth);
-  const [editorState, setEditorState] = useState("");
+
   const { register, handleSubmit, reset } = useForm();
   const onSubmit = (data) => {
     //  =========== backend api===========================
     const applicationFrom = {
       email: user.email,
       subject: data.subject,
-      desciption: editorState,
+      desciption: data.desciption,
     };
-    console.log(applicationFrom);
     BackendApiUrl.post("/application", applicationFrom).then((data) => {
       if (data) {
         toast.success("Add Your application");
@@ -41,19 +38,12 @@ const ApplicationFrom = () => {
             className="input input-bordered w-full bg-transparent my-2"
             {...register("subject")}
           />
-          <Editor
-            toolbarClassName="toolbarClassName"
-            wrapperClassName="wrapperClassName"
-            editorClassName="editorClassName"
-            toolbar={{
-              inline: { inDropdown: true },
-              list: { inDropdown: true },
-              textAlign: { inDropdown: true },
-              link: { inDropdown: true },
-              history: { inDropdown: true },
-            }}
-            onChange={(e) => setEditorState(e.blocks[0].text)}
-          />
+          <textarea
+            className="textarea textarea-bordered h-52 w-full bg-transparent my-2"
+            placeholder="Desciption"
+            required
+            {...register("desciption")}
+          ></textarea>
 
           <Input
             type="submit"

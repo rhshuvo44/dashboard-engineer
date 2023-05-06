@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import BackendApiUrl from "../api/BackendApiUrl";
 import { useAuthState } from 'react-firebase-hooks/auth';
+import BackendApiUrl from "../api/BackendApiUrl";
 import auth from "../firebase.init";
 const useEngineer = () => {
   const [engineer, setEngineer] = useState(true);
@@ -9,7 +9,7 @@ const useEngineer = () => {
   useEffect(() => {
     const email = user?.email;
     if (email) {
-      BackendApiUrl.get(`/Engineer/${email}`).then((data) => {
+      BackendApiUrl.get(`/employee/${email}`).then((data) => {
         setEngineer(data.Engineer);
         setEngineerLoading(false);
       });

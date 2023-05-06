@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import Input from "../../component/Input";
 import SectionTitle from "../../component/SectionTitle";
 import auth from "../../firebase.init";
+import BackendApiUrl from "../../api/BackendApiUrl";
 
 const RequisitionFrom = () => {
   const [user] = useAuthState(auth);
@@ -11,6 +13,7 @@ const RequisitionFrom = () => {
   const { register, handleSubmit, reset } = useForm();
   const project = "Abc Project";
   const date = new Date();
+
   const onSubmit = (data) => {
     setInputarr([...inputarr, data]);
     reset();
@@ -21,18 +24,18 @@ const RequisitionFrom = () => {
     email: user.email,
     desciption: inputarr,
   };
+  console.log(requisitionFrom);
   const requisitionSubmit = () => {
-    //  =========== backend api===========================
-
+    //  =========== backend api  ===========================
     console.log(requisitionFrom);
-    // BackendApiUrl.post("/requisition", requisitionFrom).then((data) => {
-    //   if (data) {
-    //     toast.success("Add Your requisition");
-    //     setInputarr("");
-    //   } else {
-    //     toast.error("Faild to add Your requisition");
-    //   }
-    // });
+    BackendApiUrl.post("/requisition", requisitionFrom).then((data) => {
+      if (data) {
+    toast.success("Add Your requisition");
+    setInputarr([]);
+      } else {
+        toast.error("Faild to add Your requisition");
+      }
+    });
   };
   return (
     <div className="card shadow-xl mt-10">
@@ -46,7 +49,8 @@ const RequisitionFrom = () => {
             required
             className="input input-bordered w-full bg-transparent my-2"
           />
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          <h3>Requisition</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <input
               type="text"
               placeholder="Description of Products"
@@ -55,7 +59,7 @@ const RequisitionFrom = () => {
               {...register("products")}
             />
             <input
-              type="number"
+              type="text"
               placeholder="Quentity"
               required
               className="input input-bordered w-full bg-transparent my-2"
@@ -71,9 +75,20 @@ const RequisitionFrom = () => {
             <input
               type="text"
               placeholder="Remarks"
-              required
               className="input input-bordered w-full bg-transparent my-2"
               {...register("remarks")}
+            />
+            <input
+              type="text"
+              placeholder="Remarks 1"
+              className="input input-bordered w-full bg-transparent my-2"
+              {...register("remarks1")}
+            />
+            <input
+              type="text"
+              placeholder="Remarks 2"
+              className="input input-bordered w-full bg-transparent my-2"
+              {...register("remarks2")}
             />
           </div>
           <Input
@@ -92,6 +107,8 @@ const RequisitionFrom = () => {
                 <th>Quentity</th>
                 <th>Required For</th>
                 <th>Remarks</th>
+                <th>Remarks 1</th>
+                <th>Remarks 2</th>
               </tr>
             </thead>
             <tbody>
@@ -102,21 +119,21 @@ const RequisitionFrom = () => {
                   <td>{info.quentity}</td>
                   <td>{info.required}</td>
                   <td>{info.remarks}</td>
+                  <td>{info.remarks1}</td>
+                  <td>{info.remarks2}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-
         <button
           className="btn btn-primary capitalize btn-sm w-28"
           onClick={requisitionSubmit}
         >
-          Submit{" "}
+          Submit
         </button>
       </div>
     </div>
   );
 };
-
 export default RequisitionFrom;
